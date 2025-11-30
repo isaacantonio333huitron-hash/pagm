@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Moles - Mole Doña Mayo</title>
+    <style>
+        /* Estilos básicos */
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h1, h2 { text-align: center; color: #8B0000; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #e0e0e0; }
+        .btn-carrito { background-color: #ff6347; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; }
+        .carrito, .envio, .pago { border: 1px dashed #8B0000; padding: 20px; margin-top: 30px; background-color: #fffafa; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn-accion { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; margin-top: 10px; }
+        .total-box { font-size: 1.2em; font-weight: bold; margin-top: 15px; text-align: right; }
+        .btn-continuar-envio { background-color: #007bff; }
+        .carrito-list { list-style: none; padding: 0; }
+        .carrito-list li { padding: 8px 0; border-bottom: 1px dotted #ccc; display: flex; justify-content: space-between; }
+    </style>
+    <script>
+        // Datos de los productos (Precios en centavos para evitar errores de punto flotante en JS)
+        const PRODUCTOS = {
+            poblano: { nombre: 'Mole Poblano Clásico', precio: 28000, color: 'Negro' },
+            rojo: { nombre: 'Mole Rojo Almendrado', precio: 31000, color: 'Rojo' },
+            verde: { nombre: 'Mole Verde de Pipian', precio: 25000, color: 'Verde' },
+            negro_oax: { nombre: 'Mole Negro Oaxaqueño', precio: 35000, color: 'Negro' },
+            amarillo: { nombre: 'Mole Amarillo', precio: 24000, color: 'Amarillo' }
+        };
+
+        let carrito = [];
+        const COSTO_ENVIO = 8000; // $80.00 MXN en centavos
+
+        function agregarAlCarrito(idProducto) {
+            const producto = PRODUCTOS[idProducto];
+            carrito.push(producto);
+            actualizarCarrito();
+            alert(`¡Producto Agregado! ${producto.nombre} se ha añadido a su carrito.`);
+            document.getElementById('carrito-div').style.display = 'block';
+        }
+
+        function actualizarCarrito() {
+            const listaCarrito = document.getElementById('lista-carrito');
+            listaCarrito.innerHTML = '';
+            let subtotal = 0;
+
+            carrito.forEach((item, index) => {
+                subtotal += item.precio;
+                const li = document.createElement('li');
+                const precioFormato = (item.precio / 100).toFixed(2);
+                li.innerHTML = `
+                    <span>${item.nombre} (1 Kg)</span>
+                    <span>$${precioFormato} MXN</span>
+                `;
+                listaCarrito.appendChild(li);
+            });
+
+            const total = subtotal + COSTO_ENVIO;
+            
+            document.getElementById('subtotal').textContent = `$${(subtotal / 100).toFixed(2)} MXN`;
+            document.getElementById('costo-envio').textContent = `$${(COSTO_ENVIO / 100).toFixed(2)} MXN`;
+            document.getElementById('total-pagar').textContent = `$${(total / 100).toFixed(2)} MXN`;
+            document.getElementById('total-pago-final').textContent = `$${(total / 100).toFixed(2)} MXN`;
+        }
+
+        function continuarAEnvio() {
+            if (carrito.length === 0) {
+                alert('Su carrito está vacío. Por favor, agregue un producto antes de continuar.');
+                return;
+            }
+            document.getElementById('carrito-div').style.display = 'none';
+            document.getElementById('envio-div').style.display = 'block';
+        }
+
+        function continuarAPago() {
+            // Validación básica de datos de envío (se necesita más en un sistema real)
+            const nombre = document.getElementById('nombre_envio').value;
+            const calle = document.getElementById('calle_envio').value;
+            const cp = document.getElementById('cp_envio').value;
+            
+            if (!nombre || !calle || !cp) {
+                alert('Por favor, complete todos los campos de envío.');
+                return;
+            }
+
+            document.getElementById('envio-div').style.display = 'none';
+            document.getElementById('pago-div').style.display = 'block';
+            alert('Por favor, ingrese sus datos de pago para finalizar.');
+        }
+
+        function procesarPago() {
+            // En un entorno real, esta función enviaría los datos del carrito y tarjeta
+            // a un servidor seguro y una pasarela de pago.
+            alert('¡Pago Procesado! Su compra se ha realizado con éxito y será enviada. ¡Gracias por su preferencia!');
+            // Opcional: Redirigir o limpiar el carrito.
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        
+        <h1>🌶️ Catálogo de Moles "Mole Doña Mayo" 🌶️</h1>
+        <p style="text-align: center;">¡La Tradición y el Sabor de México en tu Mesa!</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Mole</th>
+                    <th>Descripción</th>
+                    <th>Color</th>
+                    <th>Precio por Kg (Pasta)</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>**Mole Poblano Clásico**</td>
+                    <td>El rey de los moles. Mezcla de chiles, especias, semillas, chocolate y un toque de dulzura.</td>
+                    <td>Marrón Oscuro / **Negro**</td>
+                    <td>$280.00 MXN</td>
+                    <td><button class="btn-carrito" onclick="agregarAlCarrito('poblano')">Agregar al Carrito</button></td>
+                </tr>
+                <tr>
+                    <td>**Mole Rojo Almendrado**</td>
+                    <td>Vibrante, con predominio de chile ancho. Enriquecido con almendras y ajonjolí tostado.</td>
+                    <td>**Rojo** Ladrillo</td>
+                    <td>$310.00 MXN</td>
+                    <td><button class="btn-carrito" onclick="agregarAlCarrito('rojo')">Agregar al Carrito</button></td>
+                </tr>
+                <tr>
+                    <td>**Mole Verde de Pipian**</td>
+                    <td>Fresco y ligero. Elaborado con semillas de calabaza (pipian), tomate verde y cilantro.</td>
+                    <td>**Verde** Brillante</td>
+                    <td>$250.00 MXN</td>
+                    <td><button class="btn-carrito" onclick="agregarAlCarrito('verde')">Agregar al Carrito</button></td>
+                </tr>
+                <tr>
+                    <td>**Mole Negro Oaxaqueño**</td>
+                    <td>El más profundo. Caracterizado por el chile chilhuacle negro y un sabor tostado inmenso.</td>
+                    <td>**Negro** Intenso</td>
+                    <td>$350.00 MXN</td>
+                    <td><button class="btn-carrito" onclick="agregarAlCarrito('negro_oax')">Agregar al Carrito</button></td>
+                </tr>
+                <tr>
+                    <td>**Mole Amarillo**</td>
+                    <td>Ideal para caldos y guisos. Se espesa con masa de maíz para una consistencia líquida.</td>
+                    <td>**Amarillo** Ocre</td>
+                    <td>$240.00 MXN</td>
+                    <td><button class="btn-carrito" onclick="agregarAlCarrito('amarillo')">Agregar al Carrito</button></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <hr>
+
+        <div id="carrito-div" class="carrito" style="display:none;">
+            <h2>🛒 Resumen de su Compra</h2>
+            <ul id="lista-carrito" class="carrito-list">
+                </ul>
+
+            <div class="total-box">
+                <p>Subtotal: <span id="subtotal">$0.00 MXN</span></p>
+                <p>Costo de Envío: <span id="costo-envio">$80.00 MXN</span></p>
+                <hr>
+                <p>Total a Pagar: <span id="total-pagar">$0.00 MXN</span></p>
+            </div>
+            <button class="btn-accion btn-continuar-envio" onclick="continuarAEnvio()">Continuar Compra</button>
+        </div>
+
+        <div id="envio-div" class="envio" style="display:none;">
+            <h2>🚚 Datos de Envío</h2>
+            <p>Por favor, ingrese la dirección donde desea recibir su pedido.</p>
+            
+            <form onsubmit="event.preventDefault(); continuarAPago();">
+                <div class="input-group">
+                    <label for="nombre_envio">Nombre Completo</label>
+                    <input type="text" id="nombre_envio" name="nombre" required>
+                </div>
+                <div class="input-group">
+                    <label for="calle_envio">Calle y Número</label>
+                    <input type="text" id="calle_envio" name="calle" required>
+                </div>
+                <div style="display: flex; gap: 20px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label for="cp_envio">Código Postal</label>
+                        <input type="text" id="cp_envio" name="cp" required>
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label for="ciudad_envio">Ciudad / Municipio</label>
+                        <input type="text" id="ciudad_envio" name="ciudad" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="referencia_envio">Referencias (ej. color de la casa)</label>
+                    <input type="text" id="referencia_envio" name="referencia">
+                </div>
+                
+                <button type="submit" class="btn-accion btn-continuar-envio">Pasar a Pago</button>
+            </form>
+        </div>
+
+        <div id="pago-div" class="pago" style="display:none;">
+            <h2>💳 Pago Seguro</h2>
+            <p style="font-weight: bold; font-size: 1.1em;">Total a descontar: <span id="total-pago-final">$0.00 MXN</span></p>
+            
+            <form onsubmit="event.preventDefault(); procesarPago();">
+                <hr>
+                <h3>Detalles de la Tarjeta</h3>
+                
+                <div class="input-group">
+                    <label for="numero">Número de Tarjeta</label>
+                    <input type="text" id="numero" name="numero" placeholder="XXXX XXXX XXXX XXXX" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="nombre_pago">Nombre en la Tarjeta</label>
+                    <input type="text" id="nombre_pago" name="nombre" placeholder="Juan Pérez" required>
+                </div>
+                
+                <div style="display: flex; gap: 20px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label for="vencimiento">Vencimiento</label>
+                        <input type="text" id="vencimiento" name="vencimiento" placeholder="MM/AA" required>
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" name="cvv" placeholder="XXX" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-accion">Pagar y Finalizar Compra</button>
+            </form>
+        </div>
+        
+    </div>
+
+</body>
+</html>
